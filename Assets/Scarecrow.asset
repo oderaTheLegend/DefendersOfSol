@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257fc5a28daeb1c43870d49132d954cb, type: 3}
+  m_Name: Scarecrow
+  m_EditorClassIdentifier: 
+  charName: Scarecrow
+  health: 60
+  strength: 3
+  magicalPow: 5
+  physicalDef: 4
+  magicalDef: 6
