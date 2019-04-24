@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 public class BattleManager : MonoBehaviour {
+    public static BattleManager instance;
     bool battling = false;
     static int currentEnemies;
     static Character enemy1Temp;
@@ -14,8 +15,20 @@ public class BattleManager : MonoBehaviour {
     Character enemy3;
     bool enemyChance = false;
     int currentAttack = 0;//1 is attack,2 is magic
-    int enemySelected = 0;
+    int enemySelected = 0;//as
     static bool shouldSet=false;
+    float playerHealth=100;
+    GameObject enemyInView1;
+    GameObject enemyInView2;
+    GameObject enemyInView3;
+    bool enemy1Died = false;
+    bool enemy2Died = false;
+    bool enemy3Died = false;
+    private void Awake()
+    {
+        if (null == instance)
+            instance = this;
+    }
     void Start() {
         //enemy1 = ScriptableObject.CreateInstance<Character>();
         enemy2 = ScriptableObject.CreateInstance<Character>();
@@ -27,6 +40,7 @@ public class BattleManager : MonoBehaviour {
     void Update() {
         Debug.Log("enemy1=" + enemy1.health);
         Debug.Log("enemy2=" + enemy2.health);
+        Debug.Log("playerhealth= "+playerHealth);
         battling = PlayerController.inBattle;
         if (shouldSet)
         {
@@ -36,13 +50,15 @@ public class BattleManager : MonoBehaviour {
             enemy1.magicalDef = enemy1Temp.magicalDef;
             enemy1.physicalDef = enemy1Temp.physicalDef;
             enemy1.charName = enemy1Temp.charName;
-
-            enemy2.health = enemy2Temp.health;
-            enemy2.strength = enemy2Temp.strength;
-            enemy2.magicalPow = enemy2Temp.magicalPow;
-            enemy2.magicalDef = enemy2Temp.magicalDef;
-            enemy2.physicalDef = enemy2Temp.physicalDef;
-            enemy2.charName = enemy2Temp.charName;
+            if (enemy2Temp != null)
+            {
+                enemy2.health = enemy2Temp.health;
+                enemy2.strength = enemy2Temp.strength;
+                enemy2.magicalPow = enemy2Temp.magicalPow;
+                enemy2.magicalDef = enemy2Temp.magicalDef;
+                enemy2.physicalDef = enemy2Temp.physicalDef;
+                enemy2.charName = enemy2Temp.charName;
+            }
             if (enemy3Temp!=null)
             {
                 enemy3.health = enemy3Temp.health;
@@ -64,20 +80,84 @@ public class BattleManager : MonoBehaviour {
             if (enemyChance)
             {
                 EnemyAttack();
+                  
             }
-
-
-
         }
+        if (currentEnemies == 1)
+        {
+            if (enemy1.health<=0)
+            {
+                enemy1Died = true;
+                enemyInView1.SetActive(false);
+            }
+            if (enemy1Died)
+            {
+                PlayerController.inBattle = false;
+            }
+        }
+        else if (currentEnemies == 2)
+        {
+            //if (enemy1.health<=0&& enemy2.health <= 0)
+            //  {
+            //      enemyChance = false;
+            //      PlayerController.inBattle = false;
+            //      enemyInView1.SetActive(false);
+            //      enemyInView2.SetActive(false);
+            //      Debug.Log("i did ti");
+            //  }
+            
+            if (enemy1.health <= 0)
+            {
+                enemy1Died = true;
+                enemyInView1.SetActive(false);
+               
+            }
+            if (enemy2.health <= 0)
+            {
+                enemy2Died = true;
+                enemyInView2.SetActive(false);
+            }
+            if (enemy1Died&&enemy2Died)
+            {
+                PlayerController.inBattle = false;
+            }
+        }
+        else if (currentEnemies == 3)
+        {
+            if (enemy1.health <= 0)
+            {
+                enemy1Died = true;
+                enemyInView1.SetActive(false);
+
+            }
+            if (enemy2.health <= 0)
+            {
+                enemy2Died = true;
+                enemyInView2.SetActive(false);
+            }
+            if (enemy3.health <= 0)
+            {
+                enemy3Died = true;
+                enemyInView3.SetActive(false);
+            }
+            if (enemy1Died && enemy2Died&&enemy3Died)
+            {
+                PlayerController.inBattle = false;
+            }
+        }
+
     }
-    public static void StartBattle(int amountEnemies, Character name1, Character name2, Character name3) {
+    public void StartBattle(int amountEnemies, Character name1, Character name2, Character name3) {
 
         currentEnemies = amountEnemies;
         enemy1Temp = name1;
         enemy2Temp = name2;
         enemy3Temp = name3;
         shouldSet = true;
-
+        enemyChance = false;
+        enemy1Died = false;
+        enemy2Died = false;
+        enemy3Died = false;
     }
     public void Setter(){
 
@@ -85,25 +165,64 @@ public class BattleManager : MonoBehaviour {
         enemy2 = enemy2Temp;
         enemy3 = enemy3Temp;
     }
-    void EnemyAttack() {
-        Debug.Log(enemy1.health);
-       
-    }
-    public void PlayerAttack(int ene) {
-        if (ene == 1&&enemy1!=null)
+    void EnemyAttack()
+    {
+        if (currentEnemies==1)
         {
-            enemy1.health -= 10;
+            playerHealth -= enemy1.strength;
+        }
+        else if (currentEnemies == 2)
+        {
+            int rand = Random.Range(0, 1);
+            if (rand == 0)
+            {
+                playerHealth -= enemy1.strength;
+            }
+            else if (rand == 1)
+            {
+                playerHealth -= enemy2.strength;
+            }
+        }
+        else if (currentEnemies ==3)
+        {
+            int rand = Random.Range(0, 2);
+            if (rand == 0)
+            {
+                playerHealth -= enemy1.strength;
+            }
+            else if (rand == 1)
+            {
+                playerHealth -= enemy2.strength;
+            }
+            else if (rand ==2)
+            {
+                playerHealth -= enemy3.strength;
+            }
+        }
+        enemyChance = false;
+     }
+    public void PlayerAttack(int ene)
+    {
+        if (!enemyChance)
+        {
 
-        }
-        else if (ene == 2 && enemy2 != null)
-        {
-            enemy2.health -= 10;
-        }
-        else if (ene == 3 && enemy3 != null)
-        {
-            enemy3.health -= 10;
-        }
 
+            if (ene == 1 && enemy1 != null)
+            {
+                enemy1.health -= 40;
+
+
+            }
+            else if (ene == 2 && enemy2 != null)
+            {
+                enemy2.health -= 40;
+            }
+            else if (ene == 3 && enemy3 != null)
+            {
+                enemy3.health -= 40;
+            }
+        }
+        enemyChance = true;
     }
     public void ButtonSetAttack(int att) {
 
@@ -116,7 +235,8 @@ public class BattleManager : MonoBehaviour {
             currentAttack = 2;
         }
     }
-    public void ButtonSetEnemy(int ene) {
+    public void ButtonSetEnemy(int ene)
+    {
 
         if (ene == 1)
         {
@@ -129,6 +249,13 @@ public class BattleManager : MonoBehaviour {
         {
             enemySelected = 3;
         }
+
+    }
+    public void EnemyClone(GameObject one,GameObject two,GameObject three) {
+
+        enemyInView1 = one;
+        enemyInView2 = two;
+        enemyInView3 = three;
 
     }
 }

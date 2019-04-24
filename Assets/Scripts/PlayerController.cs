@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 
     public float smoothingSpeed;
     public static bool inBattle;
-    bool spawnSkeleton;
+   
     // Use this for initialization
     void Start () {
 
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour {
         anim = GetComponent<Animator>();
         anim2 = player2.GetComponent<Animator>();
         inBattle = false;
-        spawnSkeleton = false;
+        
 
         camScript = mainCam.GetComponent<CameraScript>();
     }
@@ -90,20 +90,20 @@ public class PlayerController : MonoBehaviour {
             
         //}
 
-        if (transform.position.x >= 45)
-        {
+        //if (transform.position.x >= 45)
+        //{
 
-            Vector3 desiredPos3 = new Vector3(52.91f, -3.1f, -2.34f);
-            Vector3 smoothedPos3 = Vector3.Lerp(hauntedScarecrow.transform.position, desiredPos3, smoothingSpeed);
-            hauntedScarecrow.transform.position = smoothedPos3;
-        }
+        //    Vector3 desiredPos3 = new Vector3(52.91f, -3.1f, -2.34f);
+        //    Vector3 smoothedPos3 = Vector3.Lerp(hauntedScarecrow.transform.position, desiredPos3, smoothingSpeed);
+        //    hauntedScarecrow.transform.position = smoothedPos3;
+        //}
         if (Input.GetKeyUp(KeyCode.B))
         {
             inBattle = false;
         }
         if (inBattle)
         {
-            camScript.offset.x = 5;
+            camScript.offset.x = 7;
             
         }
         else

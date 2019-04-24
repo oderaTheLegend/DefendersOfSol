@@ -11,9 +11,10 @@ public class Character : ScriptableObject {
     public float magicalPow;
     public float physicalDef;
     public float magicalDef;
+    public GameObject myPrefab;
 	// Use this for initialization
 	void Start () {
-		
+		//asda
 	}
 	
 	// Update is called once per frame

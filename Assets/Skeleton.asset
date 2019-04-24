@@ -17,3 +17,4 @@ MonoBehaviour:
   magicalPow: 1
   physicalDef: 4
   magicalDef: 2
+  myPrefab: {fileID: 1385655915127702, guid: 90aee56941d70b845af009032533e4c9, type: 2}
