@@ -1,0 +1,4 @@
+sceneSetups:
+- path: C:/OderaWork/Gam111.3/Assets/Scenes/MainGame.unity
+  isLoaded: 1
+  isActive: 1
